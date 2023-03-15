@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "217603392859",
+    "project_id": "incloset-7918f",
+    "storage_bucket": "incloset-7918f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:217603392859:android:7a6302455131813241067e",
+        "android_client_info": {
+          "package_name": "com.jakubvanko.incloset"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "217603392859-s3tiiisui06utlcd5pcq9d8ngsvd16ot.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBiZ3WPSne6TrhTtBTXwbZhGajJDjnoeXc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "217603392859-s3tiiisui06utlcd5pcq9d8ngsvd16ot.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
