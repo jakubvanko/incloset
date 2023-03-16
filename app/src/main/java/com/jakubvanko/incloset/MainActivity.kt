@@ -1,16 +1,19 @@
 package com.jakubvanko.incloset
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.rounded.AccountCircle
+import androidx.compose.material.icons.rounded.Edit
+import androidx.compose.material.icons.rounded.Home
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavDestination.Companion.hierarchy
@@ -25,15 +28,22 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.jakubvanko.incloset.ui.theme.InclosetTheme
 import androidx.navigation.compose.rememberNavController
+import com.jakubvanko.incloset.ui.theme.screens.ManageScreen
+import com.jakubvanko.incloset.ui.theme.screens.OverviewScreen
+import com.jakubvanko.incloset.ui.theme.screens.ProfileScreen
 
 class MainActivity : ComponentActivity() {
     private var user: FirebaseUser? = null
+    private val signInLauncher =
+        registerForActivityResult(FirebaseAuthUIActivityResultContract()) { res ->
+            this.onSignInFinished(res)
+        }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         user = FirebaseAuth.getInstance().currentUser
         if (user == null) {
-            signIn()
+            triggerSignInScreen()
         } else {
             setContent {
                 MainView()
@@ -41,7 +51,7 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    private fun signIn() {
+    private fun triggerSignInScreen() {
         val providers = arrayListOf(
             AuthUI.IdpConfig.EmailBuilder().build()
         )
@@ -52,12 +62,7 @@ class MainActivity : ComponentActivity() {
         signInLauncher.launch(signInIntent)
     }
 
-    private val signInLauncher =
-        registerForActivityResult(FirebaseAuthUIActivityResultContract()) { res ->
-            this.signInResult(res)
-        }
-
-    private fun signInResult(result: FirebaseAuthUIAuthenticationResult) {
+    private fun onSignInFinished(result: FirebaseAuthUIAuthenticationResult) {
         val response = result.idpResponse
         if (result.resultCode == RESULT_OK) {
             user = FirebaseAuth.getInstance().currentUser
@@ -70,43 +75,38 @@ class MainActivity : ComponentActivity() {
 enum class Routes() {
     Overview,
     Manage,
-    Preferences
+    Profile
 }
 
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+@OptIn(ExperimentalMaterial3Api::class)
 @Preview(showBackground = true)
 @Composable
 fun MainView() {
     val navController = rememberNavController();
 
     // var selectedItem by remember { mutableStateOf(0) }
-    val items = listOf("Overview", "Manage", "Preferences")
+    val items = listOf(
+        Pair(Routes.Overview, Icons.Rounded.Home),
+        Pair(Routes.Manage, Icons.Rounded.Edit),
+        Pair(Routes.Profile, Icons.Rounded.AccountCircle))
 
     InclosetTheme {
         Surface(
             modifier = Modifier.fillMaxSize(),
             color = MaterialTheme.colorScheme.background
         ) {
-            NavHost(
-                navController = navController,
-                startDestination = Routes.Overview.name
-            ) {
-                composable(Routes.Overview.name) { Text("overview") }
-                composable(Routes.Manage.name) { Text("manage") }
-                composable(Routes.Preferences.name) { Text("preferences") }
-            }
-            Box(modifier = Modifier.fillMaxSize()) {
-                NavigationBar(
-                    modifier = Modifier.align(Alignment.BottomEnd)
-                ) {
+            Scaffold(bottomBar = {
+                NavigationBar {
                     val navBackStackEntry by navController.currentBackStackEntryAsState()
                     val currentDestination = navBackStackEntry?.destination
                     items.forEachIndexed { index, item ->
                         NavigationBarItem(
-                            icon = { Icon(Icons.Filled.Favorite, contentDescription = item) },
-                            label = { Text(item) },
-                            selected = currentDestination?.hierarchy?.any { it.route == item } == true,
+                            icon = { Icon(item.second, contentDescription = item.first.name) },
+                            label = { Text(item.first.name) },
+                            selected = currentDestination?.hierarchy?.any { it.route == item.first.name } == true,
                             onClick = {
-                                navController.navigate(item) {
+                                navController.navigate(item.first.name) {
                                     // Pop up to the start destination of the graph to
                                     // avoid building up a large stack of destinations
                                     // on the back stack as users select items
@@ -122,6 +122,15 @@ fun MainView() {
                             }
                         )
                     }
+                }
+            }) {
+                NavHost(
+                    navController = navController,
+                    startDestination = Routes.Overview.name
+                ) {
+                    composable(Routes.Overview.name) { OverviewScreen() }
+                    composable(Routes.Manage.name) { ManageScreen() }
+                    composable(Routes.Profile.name) { ProfileScreen() }
                 }
             }
         }
