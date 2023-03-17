@@ -38,14 +38,18 @@ fun ItemRow(item: ClothingPiece) {
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Text("- ${item.name}")
-        Row() {
-            Icon(Icons.Rounded.Share, contentDescription = "PhotoIcon")
-            Spacer(modifier = Modifier.size(5.dp))
+        Row {
+            if (item.picture != null) {
+                // TODO: photo
+                Icon(Icons.Rounded.Share, contentDescription = "PhotoIcon")
+                Spacer(modifier = Modifier.size(5.dp))
+            }
             Text("${item.count}/${item.totalCount}")
         }
     }
 }
 
+// TODO: Generalize
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CategoryCard(category: ClothingCategory) {
@@ -60,7 +64,7 @@ fun CategoryCard(category: ClothingCategory) {
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Text(category.name, fontWeight = FontWeight.Bold, fontSize = 20.sp)
-                Text(text = "5/12")
+                Text("${category.items.sumOf { item -> item.count }}/${category.items.sumOf { item -> item.totalCount }}")
             }
             Spacer(modifier = Modifier.size(20.dp))
             category.items.forEach { item ->
