@@ -32,6 +32,7 @@ fun InfoCard(keyText: String?, valueText: String) {
     }
 }
 
+//´TODO: Something with image. Button. Take arguments.
 @Preview(showBackground = true)
 @Composable
 fun ProfileScreen() {
@@ -45,8 +46,8 @@ fun ProfileScreen() {
             contentDescription = "Translated description of what the image contains",
             contentScale = ContentScale.Crop,
             modifier = Modifier
-                .padding(0.dp, 40.dp, 0.dp, 20.dp)
-                .size(128.dp)
+                .padding(0.dp, 30.dp, 0.dp, 20.dp)
+                .size(160.dp)
                 .clip(CircleShape)                       // clip to the circle shape
                 .border(2.dp, Color.Black, CircleShape)
                 .align(Alignment.CenterHorizontally)
