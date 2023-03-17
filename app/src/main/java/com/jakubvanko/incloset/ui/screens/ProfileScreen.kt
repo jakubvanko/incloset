@@ -1,4 +1,4 @@
-package com.jakubvanko.incloset.ui.theme.screens
+package com.jakubvanko.incloset.ui.screens
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
@@ -15,7 +15,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun InfoCard(keyText: String?, valueText: String) {
     Card(

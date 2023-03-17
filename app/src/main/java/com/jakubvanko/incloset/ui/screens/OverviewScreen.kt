@@ -1,4 +1,4 @@
-package com.jakubvanko.incloset.ui.theme.screens
+package com.jakubvanko.incloset.ui.screens
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
@@ -44,13 +44,12 @@ fun ItemRow(item: ClothingPiece) {
                 Icon(Icons.Rounded.Share, contentDescription = "PhotoIcon")
                 Spacer(modifier = Modifier.size(5.dp))
             }
-            Text("${item.count}/${item.totalCount}")
+            Text("${item.count}")
         }
     }
 }
 
 // TODO: Generalize
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CategoryCard(category: ClothingCategory) {
     Card(
@@ -68,7 +67,9 @@ fun CategoryCard(category: ClothingCategory) {
             }
             Spacer(modifier = Modifier.size(20.dp))
             category.items.forEach { item ->
-                ItemRow(item)
+                if (item.count > 0) {
+                    ItemRow(item)
+                }
             }
         }
     }
@@ -82,7 +83,8 @@ fun OverviewScreen() {
                 ClothingPiece("Black T-shirt", 1, 1, "With a cat", null),
                 ClothingPiece("Red T-shirt with stars", 1, 1, null, null),
                 ClothingPiece("Dark green T-shirt", 1, 1, null, null),
-                ClothingPiece("Basic T-shirt", 3, 4, null, null)
+                ClothingPiece("Basic T-shirt", 3, 4, null, null),
+                ClothingPiece("Basic T-shirt", 0, 2, null, null)
             )
         ),
         ClothingCategory(

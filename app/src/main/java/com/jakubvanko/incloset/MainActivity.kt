@@ -10,6 +10,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.AccountCircle
 import androidx.compose.material.icons.rounded.Edit
 import androidx.compose.material.icons.rounded.Home
+import androidx.compose.material.icons.rounded.Settings
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -26,9 +27,10 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.jakubvanko.incloset.ui.theme.InclosetTheme
 import androidx.navigation.compose.rememberNavController
-import com.jakubvanko.incloset.ui.theme.screens.ManageScreen
-import com.jakubvanko.incloset.ui.theme.screens.OverviewScreen
-import com.jakubvanko.incloset.ui.theme.screens.ProfileScreen
+import com.jakubvanko.incloset.ui.screens.ManageScreen
+import com.jakubvanko.incloset.ui.screens.OverviewScreen
+import com.jakubvanko.incloset.ui.screens.ProfileScreen
+import com.jakubvanko.incloset.ui.screens.SettingsScreen
 
 class MainActivity : ComponentActivity() {
     private var user: FirebaseUser? = null
@@ -73,6 +75,7 @@ class MainActivity : ComponentActivity() {
 enum class Routes() {
     Overview,
     Manage,
+    Settings,
     Profile
 }
 
@@ -87,7 +90,9 @@ fun MainView() {
     val items = listOf(
         Pair(Routes.Overview, Icons.Rounded.Home),
         Pair(Routes.Manage, Icons.Rounded.Edit),
-        Pair(Routes.Profile, Icons.Rounded.AccountCircle))
+        Pair(Routes.Settings, Icons.Rounded.Settings),
+        Pair(Routes.Profile, Icons.Rounded.AccountCircle)
+    )
 
     InclosetTheme {
         Surface(
@@ -128,6 +133,7 @@ fun MainView() {
                 ) {
                     composable(Routes.Overview.name) { OverviewScreen() }
                     composable(Routes.Manage.name) { ManageScreen() }
+                    composable(Routes.Settings.name) { SettingsScreen() }
                     composable(Routes.Profile.name) { ProfileScreen() }
                 }
             }
