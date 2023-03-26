@@ -7,8 +7,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import com.jakubvanko.incloset.domain.model.ClothingCategory
 
-class Colors
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CategoryListItem(category: ClothingCategory, shouldStartExpanded: Boolean) {
@@ -23,7 +21,7 @@ fun CategoryListItem(category: ClothingCategory, shouldStartExpanded: Boolean) {
         )
     )
     if (isExpanded) {
-        Column() {
+        Column {
             category.items.filter { it.count > 0 }.forEach {
                 ClothingItemListItem(item = it)
                 Divider()
