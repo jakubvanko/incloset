@@ -35,13 +35,13 @@ enum class Routes {
 }
 
 @Composable
-fun NavRoutes(navController: NavHostController, paddingValues: PaddingValues) {
+fun NavRoutes(navController: NavHostController, paddingValues: PaddingValues, clothingViewModel: ClothingViewModel) {
     NavHost(
         navController = navController,
         startDestination = Routes.Overview.name,
         modifier = Modifier.padding(paddingValues)
     ) {
-        composable(Routes.Overview.name) { OverviewScreen() }
+        composable(Routes.Overview.name) { OverviewScreen(clothingViewModel) }
         composable(Routes.Manage.name) { ManageScreen() }
         composable(Routes.Settings.name) { SettingsScreen() }
         composable(Routes.Profile.name) { ProfileScreen() }
@@ -50,9 +50,8 @@ fun NavRoutes(navController: NavHostController, paddingValues: PaddingValues) {
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
-@Preview(showBackground = true)
 @Composable
-fun MainView() {
+fun MainView(clothingViewModel: ClothingViewModel) {
     val navController = rememberNavController();
 
     // var selectedItem by remember { mutableStateOf(0) }
@@ -96,7 +95,7 @@ fun MainView() {
                     }
                 }
             }) {
-                NavRoutes(navController, it)
+                NavRoutes(navController, it, clothingViewModel)
             }
         }
     }

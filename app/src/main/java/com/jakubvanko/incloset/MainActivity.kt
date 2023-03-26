@@ -9,6 +9,7 @@ import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract
 import com.firebase.ui.auth.data.model.FirebaseAuthUIAuthenticationResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.jakubvanko.incloset.presentation.ClothingViewModel
 import com.jakubvanko.incloset.presentation.MainView
 
 class MainActivity : ComponentActivity() {
@@ -21,11 +22,12 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         user = FirebaseAuth.getInstance().currentUser
+        val viewModel = ClothingViewModel();
         if (user == null) {
             triggerSignInScreen()
         } else {
             setContent {
-                MainView()
+                MainView(viewModel)
             }
         }
     }
