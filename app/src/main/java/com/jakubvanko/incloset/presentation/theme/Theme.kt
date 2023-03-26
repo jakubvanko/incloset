@@ -1,4 +1,4 @@
-package com.jakubvanko.incloset.ui.theme
+package com.jakubvanko.incloset.presentation.theme
 
 import android.app.Activity
 import android.os.Build

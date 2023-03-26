@@ -2,14 +2,10 @@ package com.jakubvanko.incloset.ui.screens
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.outlined.Add
-import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.outlined.KeyboardArrowDown
 import androidx.compose.material.icons.outlined.KeyboardArrowUp
 import androidx.compose.material3.*
@@ -20,16 +16,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.KeyboardType.Companion.Number
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
-import com.jakubvanko.incloset.data.ClothingCategory
-import com.jakubvanko.incloset.data.ClothingPiece
+import com.jakubvanko.incloset.domain.model.ClothingCategory
+import com.jakubvanko.incloset.domain.model.ClothingItem
 
 @Preview
 @Composable
@@ -43,22 +37,22 @@ fun ManageScreen() {
     val categories = listOf(
         ClothingCategory(
             "T-shirts", 1, "T-shirts with a short sleeve", mutableListOf(
-                ClothingPiece("Black T-shirt", 1, 1, "With a cat", null),
-                ClothingPiece("Red T-shirt with stars", 1, 1, null, null),
-                ClothingPiece("Dark green T-shirt", 1, 1, null, null),
-                ClothingPiece("Basic T-shirt", 3, 4, null, null),
-                ClothingPiece("Special T-shirt", 0, 2, null, null)
+                ClothingItem("Black T-shirt", 1, 1, "With a cat", null),
+                ClothingItem("Red T-shirt with stars", 1, 1, null, null),
+                ClothingItem("Dark green T-shirt", 1, 1, null, null),
+                ClothingItem("Basic T-shirt", 3, 4, null, null),
+                ClothingItem("Special T-shirt", 0, 2, null, null)
             )
         ),
         ClothingCategory(
             "Trousers", 1, "Basic jeans", mutableListOf(
-                ClothingPiece("Whitewashed jeans", 1, 1, "Informal", null),
-                ClothingPiece("Black jeans", 2, 3, "Good for everyday usage", null)
+                ClothingItem("Whitewashed jeans", 1, 1, "Informal", null),
+                ClothingItem("Black jeans", 2, 3, "Good for everyday usage", null)
             )
         ),
         ClothingCategory(
             "Underwear", 2, "Boxer briefs", mutableListOf(
-                ClothingPiece("Underwear", 8, 12, "Boxers and briefs", null)
+                ClothingItem("Underwear", 8, 12, "Boxers and briefs", null)
             )
         )
     )
