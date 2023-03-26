@@ -42,7 +42,7 @@ fun NavRoutes(navController: NavHostController, paddingValues: PaddingValues, cl
         modifier = Modifier.padding(paddingValues)
     ) {
         composable(Routes.Overview.name) { OverviewScreen(clothingViewModel) }
-        composable(Routes.Manage.name) { ManageScreen() }
+        composable(Routes.Manage.name) { ManageScreen(clothingViewModel) }
         composable(Routes.Settings.name) { SettingsScreen() }
         composable(Routes.Profile.name) { ProfileScreen() }
     }

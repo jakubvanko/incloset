@@ -24,41 +24,13 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.jakubvanko.incloset.domain.model.ClothingCategory
 import com.jakubvanko.incloset.domain.model.ClothingItem
-
-@Preview
-@Composable
-fun Preview1() {
-    ManageScreen()
-}
+import com.jakubvanko.incloset.presentation.ClothingViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ManageScreen() {
-    val categories = listOf(
-        ClothingCategory(
-            "T-shirts", 1, "T-shirts with a short sleeve", mutableListOf(
-                ClothingItem("Black T-shirt", 1, 1, "With a cat", null),
-                ClothingItem("Red T-shirt with stars", 1, 1, null, null),
-                ClothingItem("Dark green T-shirt", 1, 1, null, null),
-                ClothingItem("Basic T-shirt", 3, 4, null, null),
-                ClothingItem("Special T-shirt", 0, 2, null, null)
-            )
-        ),
-        ClothingCategory(
-            "Trousers", 1, "Basic jeans", mutableListOf(
-                ClothingItem("Whitewashed jeans", 1, 1, "Informal", null),
-                ClothingItem("Black jeans", 2, 3, "Good for everyday usage", null)
-            )
-        ),
-        ClothingCategory(
-            "Underwear", 2, "Boxer briefs", mutableListOf(
-                ClothingItem("Underwear", 8, 12, "Boxers and briefs", null)
-            )
-        )
-    )
-
+fun ManageScreen(clothingViewModel: ClothingViewModel) {
     var expanded by remember { mutableStateOf(false) }
-    var selectedCategory by remember { mutableStateOf(categories[0]) }
+    var selectedCategory by remember { mutableStateOf(clothingViewModel.clothingCategories[0]) }
 
     Column(
         modifier = Modifier
@@ -87,7 +59,7 @@ fun ManageScreen() {
                     expanded = expanded,
                     onDismissRequest = { expanded = false },
                 ) {
-                    categories.forEach { category ->
+                    clothingViewModel.clothingCategories.forEach { category ->
                         DropdownMenuItem(
                             text = { Text(category.name) },
                             onClick = {
@@ -100,7 +72,7 @@ fun ManageScreen() {
                 }
             }
         }
-        selectedCategory.items.forEach { item ->
+        clothingViewModel.clothingItems.filter { it.category == selectedCategory }.forEach { item ->
             ListItem(
                 headlineText = { Text(item.name) },
                 supportingText = {

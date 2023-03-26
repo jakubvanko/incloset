@@ -6,23 +6,28 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import com.jakubvanko.incloset.domain.model.ClothingCategory
+import com.jakubvanko.incloset.domain.model.ClothingItem
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CategoryListItem(category: ClothingCategory, shouldStartExpanded: Boolean) {
+fun CategoryListItem(
+    category: ClothingCategory,
+    categoryItems: List<ClothingItem>,
+    shouldStartExpanded: Boolean
+) {
     val (isExpanded, setExpanded) = remember { mutableStateOf(shouldStartExpanded) }
 
     ListItem(
         modifier = Modifier.clickable { setExpanded(!isExpanded) },
         headlineText = { Text(text = category.name) },
-        trailingContent = { Text(text = "${category.items.sumOf { it.count }}/${category.items.sumOf { it.totalCount }}") },
+        trailingContent = { Text(text = "${categoryItems.sumOf { it.count }}/${categoryItems.sumOf { it.totalCount }}") },
         colors = ListItemDefaults.colors(
             containerColor = MaterialTheme.colorScheme.primaryContainer
         )
     )
     if (isExpanded) {
         Column {
-            category.items.filter { it.count > 0 }.forEach {
+            categoryItems.filter { it.count > 0 }.forEach {
                 ClothingItemListItem(item = it)
                 Divider()
             }

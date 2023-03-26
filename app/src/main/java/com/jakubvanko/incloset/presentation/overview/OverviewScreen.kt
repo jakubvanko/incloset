@@ -9,6 +9,9 @@ import com.jakubvanko.incloset.presentation.overview.components.*
 fun OverviewScreen(clothingViewModel: ClothingViewModel) {
     Column {
         Heading(status = ClosetStatus.Ok)
-        CategoryList(clothingCategoryList = clothingViewModel.clothingCategories)
+        CategoryList(
+            clothingCategoryList = clothingViewModel.clothingCategories,
+            clothingItemList = clothingViewModel.clothingItems
+        )
     }
 }

@@ -10,17 +10,22 @@ class ClothingViewModel : ViewModel() {
     private val clothingRepository = ClothingRepository();
     private val _clothingCategories = mutableStateListOf<ClothingCategory>()
     val clothingCategories: List<ClothingCategory> = _clothingCategories
+    private val _clothingItems = mutableStateListOf<ClothingItem>()
+    val clothingItems: List<ClothingItem> = _clothingItems
 
     init {
-        _clothingCategories.addAll(clothingRepository.getClothingCategories());
+        val repositoryResult = clothingRepository.getClothingCategories()
+        _clothingCategories.addAll(repositoryResult.second);
+        _clothingItems.addAll(repositoryResult.first)
     }
 
     fun addClothingCategory(
-        name: String,
-        minNeededAmount: Int,
-        description: String?,
-        items: MutableList<ClothingItem>
+        name: String, minNeededAmount: Int, description: String?, items: MutableList<ClothingItem>
     ) {
-        _clothingCategories.add(ClothingCategory(name, minNeededAmount, description, items))
+
+    }
+
+    fun lowerItemCount(item: ClothingItem, newCount: Int) {
+
     }
 }
