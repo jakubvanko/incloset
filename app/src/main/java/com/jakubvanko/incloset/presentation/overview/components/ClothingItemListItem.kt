@@ -1,10 +1,13 @@
 package com.jakubvanko.incloset.presentation.overview.components
 
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -12,6 +15,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.jakubvanko.incloset.domain.model.ClothingItem
+import com.jakubvanko.incloset.presentation.ClothingViewModel
 
 @Composable
 fun Image() {
@@ -28,8 +32,14 @@ fun Image() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ClothingItemListItem(item: ClothingItem) {
+fun ClothingItemListItem(
+    item: ClothingItem,
+    clothingViewModel: ClothingViewModel,
+    isExpanded: Boolean,
+    setExpanded: (Boolean) -> Unit
+) {
     ListItem(
+        modifier = Modifier.clickable { setExpanded(!isExpanded) },
         headlineText = { Text(text = item.name) },
         supportingText = {
             if (item.description != null) {
@@ -38,4 +48,7 @@ fun ClothingItemListItem(item: ClothingItem) {
         },
         trailingContent = { Text(text = item.count.toString()) },
     )
+    if (isExpanded) {
+        ClothingItemListItemTooltip(item = item, clothingViewModel = clothingViewModel)
+    }
 }

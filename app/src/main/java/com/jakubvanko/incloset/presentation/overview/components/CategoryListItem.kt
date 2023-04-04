@@ -7,12 +7,15 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import com.jakubvanko.incloset.domain.model.ClothingCategory
 import com.jakubvanko.incloset.domain.model.ClothingItem
+import com.jakubvanko.incloset.presentation.ClothingViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CategoryListItem(
     category: ClothingCategory,
     categoryItems: List<ClothingItem>,
+    clothingViewModel: ClothingViewModel,
+    isEditing: Boolean,
     shouldStartExpanded: Boolean
 ) {
     val (isExpanded, setExpanded) = remember { mutableStateOf(shouldStartExpanded) }
@@ -26,11 +29,6 @@ fun CategoryListItem(
         )
     )
     if (isExpanded) {
-        Column {
-            categoryItems.filter { it.count > 0 }.forEach {
-                ClothingItemListItem(item = it)
-                Divider()
-            }
-        }
+        ClothingItemList(categoryItems = categoryItems, clothingViewModel = clothingViewModel, isEditing = isEditing)
     }
 }

@@ -21,7 +21,7 @@ fun getItemsMock(): Pair<List<ClothingItem>, List<ClothingCategory>> {
         ClothingItem("2", "Red T-shirt", 1, 1, clothingCategories[0], "With stars", null),
         ClothingItem("3", "Dark green T-shirt", 1, 1, clothingCategories[0], null, null),
         ClothingItem("4", "Basic T-shirt", 3, 4, clothingCategories[0], null, null),
-        ClothingItem("5", "Basic T-shirt", 0, 2, clothingCategories[0], null, null),
+        ClothingItem("5", "Uncommon T-shirt", 0, 2, clothingCategories[0], null, null),
         ClothingItem("6", "Whitewashed jeans", 1, 1, clothingCategories[1], "Informal", null),
         ClothingItem("7", "Black jeans", 2, 3, clothingCategories[1], "For everyday usage", null),
         ClothingItem("8", "Underwear", 8, 12, clothingCategories[2], "Boxers and briefs", null)

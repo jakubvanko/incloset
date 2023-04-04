@@ -112,14 +112,14 @@ fun ManageScreen(clothingViewModel: ClothingViewModel) {
                 },
                 trailingContent = {
                     Column() {
-                        IconButton(onClick = { /* doSomething() */ }) {
+                        IconButton(onClick = { clothingViewModel.increaseItemCount(item) }) {
                             Icon(
                                 Icons.Outlined.KeyboardArrowUp,
                                 tint = Color.hsl(138f, 0.83f, 0.27f),
                                 contentDescription = "Localized description"
                             )
                         }
-                        IconButton(onClick = { /* doSomething() */ }) {
+                        IconButton(onClick = { clothingViewModel.decreaseItemCount(item) }) {
                             Icon(
                                 Icons.Outlined.KeyboardArrowDown,
                                 tint = Color.hsl(0f, 0.82f, 0.36f),

@@ -19,13 +19,23 @@ class ClothingViewModel : ViewModel() {
         _clothingItems.addAll(repositoryResult.first)
     }
 
-    fun addClothingCategory(
-        name: String, minNeededAmount: Int, description: String?, items: MutableList<ClothingItem>
-    ) {
-
+    fun setItemCount(item: ClothingItem, newCount: Int) {
+        var countToSet = newCount
+        if (countToSet < 0) {
+            countToSet = 0
+        }
+        if (countToSet > item.totalCount) {
+            countToSet = item.totalCount
+        }
+        val index = _clothingItems.indexOf(item)
+        _clothingItems[index] = _clothingItems[index].copy(count = countToSet)
     }
 
-    fun lowerItemCount(item: ClothingItem, newCount: Int) {
+    fun decreaseItemCount(item: ClothingItem) {
+        setItemCount(item, item.count - 1)
+    }
 
+    fun increaseItemCount(item: ClothingItem) {
+        setItemCount(item, item.count + 1)
     }
 }
