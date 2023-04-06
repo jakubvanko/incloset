@@ -21,34 +21,29 @@ import com.jakubvanko.incloset.domain.model.ClothingItem
 import com.jakubvanko.incloset.presentation.ClothingViewModel
 
 @Composable
+private fun WhateverTextField() {
+    BasicTextField(
+        modifier = Modifier
+            .width(IntrinsicSize.Min)
+            .padding(0.dp, 0.dp, 3.dp, 0.dp),
+        value = "item.count.toString()",
+        onValueChange = {},
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+        textStyle = LocalTextStyle.current.copy(
+            textAlign = TextAlign.End,
+            fontSize = 16.sp
+        )
+    )
+}
+
+@Composable
 fun ItemTooltip(item: ClothingItem, clothingViewModel: ClothingViewModel) {
-    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-        Row {
-            BasicTextField(
-                modifier = Modifier
-                    .width(IntrinsicSize.Min)
-                    .padding(0.dp, 0.dp, 3.dp, 0.dp),
-                value = item.count.toString(),
-                onValueChange = {},
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                textStyle = LocalTextStyle.current.copy(
-                    textAlign = TextAlign.End,
-                    fontSize = 16.sp
-                )
-            )
-            Text("/", fontSize = 16.sp)
-            BasicTextField(
-                modifier =
-                Modifier
-                    .width(IntrinsicSize.Min)
-                    .padding(3.dp, 0.dp, 0.dp, 0.dp),
-                value = item.totalCount.toString(),
-                onValueChange = {},
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                textStyle = LocalTextStyle.current.copy(
-                    textAlign = TextAlign.Left,
-                    fontSize = 16.sp
-                )
+    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
+        IconButton(onClick = { clothingViewModel.decreaseItemCount(item) }) {
+            Icon(
+                Icons.Outlined.KeyboardArrowDown,
+                tint = Color.hsl(0f, 0.82f, 0.36f),
+                contentDescription = "Decrease item count"
             )
         }
         IconButton(onClick = { clothingViewModel.increaseItemCount(item) }) {
@@ -56,13 +51,6 @@ fun ItemTooltip(item: ClothingItem, clothingViewModel: ClothingViewModel) {
                 Icons.Outlined.KeyboardArrowUp,
                 tint = Color.hsl(138f, 0.83f, 0.27f),
                 contentDescription = "Increase item count"
-            )
-        }
-        IconButton(onClick = { clothingViewModel.decreaseItemCount(item) }) {
-            Icon(
-                Icons.Outlined.KeyboardArrowDown,
-                tint = Color.hsl(0f, 0.82f, 0.36f),
-                contentDescription = "Decrease item count"
             )
         }
     }

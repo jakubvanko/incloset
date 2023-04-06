@@ -32,7 +32,9 @@ private fun getClothingItems(
 @Composable
 private fun EmptyItemBox() {
     Row(
-        modifier = Modifier.fillMaxWidth().padding(16.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp),
         horizontalArrangement = Arrangement.Center,
     ) {
         Text(text = "No items", color = Color.Gray)
@@ -49,6 +51,9 @@ fun ClothingListForCategory(
 
     Column {
         clothingItems.forEach { item ->
+            val isTooltipVisible =
+                clothingViewModel.itemTooltipVisible.getOrDefault(item.id, false);
+
             ListItem(
                 modifier = Modifier.clickable { clothingViewModel.flipItemViewExpanded(item) },
                 headlineText = { Text(text = item.name) },
@@ -59,14 +64,14 @@ fun ClothingListForCategory(
                 },
                 trailingContent = {
                     Text(
-                        text = if (clothingViewModel.isInEditMode)
+                        text = if (clothingViewModel.isInEditMode || isTooltipVisible)
                             "${item.count}/${item.totalCount}"
                         else item.count.toString()
                     )
                 },
                 tonalElevation = if (item.count == 0) 10.dp else 0.dp
             )
-            if (clothingViewModel.itemTooltipVisible.getOrDefault(item.id, false)) {
+            if (isTooltipVisible) {
                 ItemTooltip(item = item, clothingViewModel = clothingViewModel)
             }
             Divider()
