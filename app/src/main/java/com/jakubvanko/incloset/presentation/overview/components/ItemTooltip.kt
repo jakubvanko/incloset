@@ -21,7 +21,7 @@ import com.jakubvanko.incloset.domain.model.ClothingItem
 import com.jakubvanko.incloset.presentation.ClothingViewModel
 
 @Composable
-fun ClothingItemListItemTooltip(item: ClothingItem, clothingViewModel: ClothingViewModel) {
+fun ItemTooltip(item: ClothingItem, clothingViewModel: ClothingViewModel) {
     Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
         Row {
             BasicTextField(

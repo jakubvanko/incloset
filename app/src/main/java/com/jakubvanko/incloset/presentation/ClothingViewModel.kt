@@ -20,7 +20,7 @@ class ClothingViewModel : ViewModel() {
     var currentClosetStatus by mutableStateOf(ClosetStatus.Ok)
         private set
     private val _itemViewExpanded = mutableStateMapOf<String, Boolean>()
-    val itemViewExpanded: Map<String, Boolean> = _itemViewExpanded
+    val itemTooltipVisible: Map<String, Boolean> = _itemViewExpanded
     private val _categoryViewExpanded = mutableStateMapOf<String, Boolean>()
     val categoryViewExpanded: Map<String, Boolean> = _categoryViewExpanded
 
@@ -31,9 +31,31 @@ class ClothingViewModel : ViewModel() {
         _categoryViewExpanded[_clothingCategories.first().id] = true
         _clothingItems.addAll(repositoryResult.first)
         _clothingItems.sortBy { it.name }
+        updateClosetStatus()
     }
 
-    fun setItemCount(item: ClothingItem, newCount: Int) {
+    private fun updateClosetStatus() {
+        val statusPerCategory = clothingCategories.map {
+            val categoryItems = _clothingItems.filter { item -> item.category == it }
+            val categoryItemCount = categoryItems.sumOf { item -> item.count }
+            if (categoryItemCount > it.minNeededAmount) {
+                ClosetStatus.Ok
+            } else if (categoryItemCount == it.minNeededAmount) {
+                ClosetStatus.Warning
+            } else {
+                ClosetStatus.Empty
+            }
+        }
+        if (statusPerCategory.contains(ClosetStatus.Empty)) {
+            currentClosetStatus = ClosetStatus.Empty
+        } else if (statusPerCategory.contains(ClosetStatus.Warning)) {
+            currentClosetStatus = ClosetStatus.Warning
+        } else {
+            currentClosetStatus = ClosetStatus.Ok
+        }
+    }
+
+    private fun setItemCount(item: ClothingItem, newCount: Int) {
         var countToSet = newCount
         if (countToSet < 0) {
             countToSet = 0
@@ -46,10 +68,12 @@ class ClothingViewModel : ViewModel() {
         }
         val index = _clothingItems.indexOf(item)
         _clothingItems[index] = _clothingItems[index].copy(count = countToSet)
+        updateClosetStatus()
     }
 
     fun decreaseItemCount(item: ClothingItem) {
         setItemCount(item, item.count - 1)
+
     }
 
     fun increaseItemCount(item: ClothingItem) {

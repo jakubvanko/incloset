@@ -1,37 +1,55 @@
 package com.jakubvanko.incloset.presentation.overview.components
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
+import com.jakubvanko.incloset.domain.model.ClosetStatus
 import com.jakubvanko.incloset.domain.model.ClothingCategory
-import com.jakubvanko.incloset.domain.model.ClothingItem
 import com.jakubvanko.incloset.presentation.ClothingViewModel
-import kotlin.reflect.KProperty1
 
-fun getSumForCategory(
-    category: ClothingCategory,
+@Composable
+private fun CategoryCountText(category: ClothingCategory, clothingViewModel: ClothingViewModel) {
+    Text(text = "${
+        clothingViewModel.clothingItems.filter { it.category == category }.sumOf { it.count }
+    }/${
+        clothingViewModel.clothingItems.filter { it.category == category }.sumOf { it.totalCount }
+    }")
+}
+
+private fun getClosetStatusForCategory(
     clothingViewModel: ClothingViewModel,
-    property: KProperty1<ClothingItem, Int>
-): Int {
-    return clothingViewModel.clothingItems.filter { it.category == category }
-        .sumOf { property.get(it) }
+    category: ClothingCategory
+): ClosetStatus {
+    val categoryItemCount =
+        clothingViewModel.clothingItems.filter { it.category == category }.sumOf { it.count }
+    return when {
+        categoryItemCount > category.minNeededAmount -> ClosetStatus.Ok
+        categoryItemCount == category.minNeededAmount -> ClosetStatus.Warning
+        else -> ClosetStatus.Empty
+    }
 }
 
 @Composable
-fun CategoryCountText(category: ClothingCategory, clothingViewModel: ClothingViewModel) {
-    Text(
-        text = "${
-            clothingViewModel.clothingItems.filter { it.category == category }
-                .sumOf { it.count }
-        }/${
-            clothingViewModel.clothingItems.filter { it.category == category }
-                .sumOf { it.totalCount }
-        }"
-    )
+private fun TrailingContent(clothingViewModel: ClothingViewModel, category: ClothingCategory) {
+    Row(verticalAlignment = Alignment.CenterVertically) {
+        CategoryCountText(category = category, clothingViewModel = clothingViewModel)
+        Spacer(modifier = Modifier.width(8.dp))
+        ClosetStatusIcon(
+            closetStatus = getClosetStatusForCategory(
+                clothingViewModel = clothingViewModel,
+                category = category
+            )
+        )
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -45,16 +63,15 @@ fun CategoryList(
                 modifier = Modifier.clickable { clothingViewModel.flipCategoryViewExpanded(category = it) },
                 headlineText = { Text(text = it.name) },
                 trailingContent = {
-                    CategoryCountText(clothingViewModel = clothingViewModel, category = it)
+                    TrailingContent(clothingViewModel = clothingViewModel, category = it)
                 },
                 colors = ListItemDefaults.colors(
                     containerColor = MaterialTheme.colorScheme.primaryContainer
                 )
             )
             if (clothingViewModel.categoryViewExpanded.getOrDefault(it.id, false)) {
-                ClothingItemSubList(
-                    category = it,
-                    clothingViewModel = clothingViewModel
+                ClothingListForCategory(
+                    category = it, clothingViewModel = clothingViewModel
                 )
             }
         }
