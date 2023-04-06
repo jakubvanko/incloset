@@ -3,10 +3,21 @@ package com.jakubvanko.incloset.data.repository
 import com.jakubvanko.incloset.domain.model.ClothingCategory
 import com.jakubvanko.incloset.domain.model.ClothingItem
 
+enum class SettingsAction {
+    EditCategory,
+    EditItem,
+    CreateCategory,
+    CreateItem,
+}
+
 class ClothingRepository {
 
     fun getClothingCategories(): Pair<List<ClothingItem>, List<ClothingCategory>> {
         return getItemsMock()
+    }
+
+    fun generateId(): String {
+        return System.currentTimeMillis().toString()
     }
 }
 

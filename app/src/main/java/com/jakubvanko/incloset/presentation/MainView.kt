@@ -13,7 +13,6 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
@@ -22,10 +21,9 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.jakubvanko.incloset.presentation.overview.OverviewScreen
-import com.jakubvanko.incloset.ui.screens.ManageScreen
-import com.jakubvanko.incloset.ui.screens.ProfileScreen
-import com.jakubvanko.incloset.ui.screens.SettingsScreen
+import com.jakubvanko.incloset.presentation.settings.SettingsScreen
 import com.jakubvanko.incloset.presentation.theme.InclosetTheme
+import com.jakubvanko.incloset.ui.screens.ProfileScreen
 
 enum class Routes {
     Overview,
@@ -35,15 +33,18 @@ enum class Routes {
 }
 
 @Composable
-fun NavRoutes(navController: NavHostController, paddingValues: PaddingValues, clothingViewModel: ClothingViewModel) {
+fun NavRoutes(
+    navController: NavHostController,
+    paddingValues: PaddingValues,
+    clothingViewModel: ClothingViewModel
+) {
     NavHost(
         navController = navController,
         startDestination = Routes.Overview.name,
         modifier = Modifier.padding(paddingValues)
     ) {
         composable(Routes.Overview.name) { OverviewScreen(clothingViewModel) }
-        composable(Routes.Manage.name) { ManageScreen(clothingViewModel) }
-        composable(Routes.Settings.name) { SettingsScreen() }
+        composable(Routes.Settings.name) { SettingsScreen(clothingViewModel) }
         composable(Routes.Profile.name) { ProfileScreen() }
     }
 }
@@ -54,11 +55,10 @@ fun NavRoutes(navController: NavHostController, paddingValues: PaddingValues, cl
 fun MainView(clothingViewModel: ClothingViewModel) {
     val navController = rememberNavController();
 
-    // var selectedItem by remember { mutableStateOf(0) }
     val items = listOf(
         Pair(Routes.Overview, Icons.Rounded.Home),
-        Pair(Routes.Manage, Icons.Rounded.Edit),
         Pair(Routes.Settings, Icons.Rounded.Settings),
+        //Pair(Routes.Manage, Icons.Rounded.Edit),
         Pair(Routes.Profile, Icons.Rounded.AccountCircle)
     )
 

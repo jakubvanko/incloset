@@ -3,6 +3,7 @@ package com.jakubvanko.incloset.presentation
 import androidx.compose.runtime.*
 import androidx.lifecycle.ViewModel
 import com.jakubvanko.incloset.data.repository.ClothingRepository
+import com.jakubvanko.incloset.data.repository.SettingsAction
 import com.jakubvanko.incloset.domain.model.ClosetStatus
 import com.jakubvanko.incloset.domain.model.ClothingCategory
 import com.jakubvanko.incloset.domain.model.ClothingItem
@@ -23,6 +24,7 @@ class ClothingViewModel : ViewModel() {
     val itemTooltipVisible: Map<String, Boolean> = _itemViewExpanded
     private val _categoryViewExpanded = mutableStateMapOf<String, Boolean>()
     val categoryViewExpanded: Map<String, Boolean> = _categoryViewExpanded
+    var currentSettingsAction by mutableStateOf(SettingsAction.EditCategory)
 
     init {
         val repositoryResult = clothingRepository.getClothingCategories()
@@ -71,9 +73,20 @@ class ClothingViewModel : ViewModel() {
         updateClosetStatus()
     }
 
+    fun createCategory(name: String, minNeededAmount: Int, description: String?) {
+        val newCategory = ClothingCategory(
+            id = clothingRepository.generateId(),
+            name = name,
+            minNeededAmount = minNeededAmount,
+            description = description
+        )
+        _clothingCategories.add(newCategory)
+        _clothingCategories.sortBy { it.name }
+        updateClosetStatus()
+    }
+
     fun decreaseItemCount(item: ClothingItem) {
         setItemCount(item, item.count - 1)
-
     }
 
     fun increaseItemCount(item: ClothingItem) {
