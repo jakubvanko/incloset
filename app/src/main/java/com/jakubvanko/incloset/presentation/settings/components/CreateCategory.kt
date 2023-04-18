@@ -1,18 +1,15 @@
 package com.jakubvanko.incloset.presentation.settings.components
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.Button
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.capitalize
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.intl.Locale
+import androidx.compose.ui.unit.dp
 import com.jakubvanko.incloset.presentation.ClothingViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -25,7 +22,11 @@ fun CreateCategory(clothingViewModel: ClothingViewModel) {
     var isMinNeededAmountError by remember { mutableStateOf(false) }
     var isSuccess by remember { mutableStateOf(false) }
 
-    Column(modifier = Modifier.fillMaxWidth()) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(24.dp, 32.dp)
+    ) {
         TextField(
             modifier = Modifier.fillMaxWidth(),
             value = name,
@@ -33,12 +34,22 @@ fun CreateCategory(clothingViewModel: ClothingViewModel) {
                 name = it.capitalize(Locale.current)
                 isNameError = false
             },
-            label = { Text("Name") })
+            label = { Text("Name") },
+            isError = isNameError,
+            supportingText = {
+                if (isNameError) {
+                    Text("Name must not be empty", color = Color.Red)
+                }
+            }
+        )
+        Spacer(modifier = Modifier.height(24.dp))
         TextField(
             modifier = Modifier.fillMaxWidth(),
             value = description,
             onValueChange = { description = it },
-            label = { Text("Description") })
+            label = { Text("Description") }
+        )
+        Spacer(modifier = Modifier.height(24.dp))
         TextField(
             modifier = Modifier.fillMaxWidth(),
             value = minNeededAmount,
@@ -50,7 +61,14 @@ fun CreateCategory(clothingViewModel: ClothingViewModel) {
             },
             label = { Text("Minimum needed amount") },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+            isError = isMinNeededAmountError,
+            supportingText = {
+                if (isMinNeededAmountError) {
+                    Text("Minimum needed amount must be a number", color = Color.Red)
+                }
+            }
         )
+        Spacer(modifier = Modifier.height(24.dp))
         Button(onClick = {
             if (minNeededAmount == "") {
                 isMinNeededAmountError = true
@@ -65,12 +83,6 @@ fun CreateCategory(clothingViewModel: ClothingViewModel) {
             }
         }) {
             Text("Create new category")
-        }
-        if (isNameError) {
-            Text("Name cannot be empty", color = Color.Red)
-        }
-        if (isMinNeededAmountError) {
-            Text("Minimum needed amount must be a number", color = Color.Red)
         }
         if (isSuccess && !isNameError && !isMinNeededAmountError) {
             Text("Category created successfully", color = Color.Green)
