@@ -85,6 +85,27 @@ class ClothingViewModel : ViewModel() {
         updateClosetStatus()
     }
 
+    fun createItem(
+        name: String,
+        count: Int,
+        totalCount: Int,
+        category: ClothingCategory,
+        description: String?
+    ) {
+        val newItem = ClothingItem(
+            id = clothingRepository.generateId(),
+            name = name,
+            count = count,
+            totalCount = totalCount,
+            category = category,
+            description = description,
+            picture = null
+        )
+        _clothingItems.add(newItem)
+        _clothingItems.sortBy { it.name }
+        updateClosetStatus()
+    }
+
     fun decreaseItemCount(item: ClothingItem) {
         setItemCount(item, item.count - 1)
     }

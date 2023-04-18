@@ -16,16 +16,20 @@ import com.jakubvanko.incloset.presentation.ClothingViewModel
 @Composable
 fun CreateCategory(clothingViewModel: ClothingViewModel) {
     var name by remember { mutableStateOf("") }
-    var description by remember { mutableStateOf("") }
-    var minNeededAmount by remember { mutableStateOf("0") }
     var isNameError by remember { mutableStateOf(false) }
+
+    var description by remember { mutableStateOf("") }
+
+    var minNeededAmount by remember { mutableStateOf("1") }
     var isMinNeededAmountError by remember { mutableStateOf(false) }
+
     var isSuccess by remember { mutableStateOf(false) }
 
     Column(
         modifier = Modifier
             .fillMaxWidth()
             .padding(24.dp, 32.dp)
+    // TODO: FIX SCROLLING
     ) {
         TextField(
             modifier = Modifier.fillMaxWidth(),
@@ -69,16 +73,18 @@ fun CreateCategory(clothingViewModel: ClothingViewModel) {
             }
         )
         Spacer(modifier = Modifier.height(24.dp))
-        Button(onClick = {
+        Button(modifier = Modifier.fillMaxWidth(), onClick = {
             if (minNeededAmount == "") {
                 isMinNeededAmountError = true
-            } else if (name == "") {
+            }
+            if (name == "") {
                 isNameError = true
-            } else {
+            }
+            if (name != "" && minNeededAmount != "") {
                 clothingViewModel.createCategory(name, minNeededAmount.toInt(), description)
                 name = ""
                 description = ""
-                minNeededAmount = "0"
+                minNeededAmount = "1"
                 isSuccess = true
             }
         }) {
