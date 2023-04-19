@@ -25,6 +25,9 @@ class MainActivity : ComponentActivity() {
         val viewModel = ClothingViewModel();
         if (user == null) {
             triggerSignInScreen()
+            setContent {
+                MainView(viewModel)
+            }
         } else {
             setContent {
                 MainView(viewModel)
