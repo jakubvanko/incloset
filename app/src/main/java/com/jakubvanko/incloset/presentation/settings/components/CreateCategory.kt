@@ -1,7 +1,9 @@
 package com.jakubvanko.incloset.presentation.settings.components
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -29,7 +31,7 @@ fun CreateCategory(clothingViewModel: ClothingViewModel) {
         modifier = Modifier
             .fillMaxWidth()
             .padding(24.dp, 32.dp)
-    // TODO: FIX SCROLLING
+            .verticalScroll(rememberScrollState())
     ) {
         TextField(
             modifier = Modifier.fillMaxWidth(),
