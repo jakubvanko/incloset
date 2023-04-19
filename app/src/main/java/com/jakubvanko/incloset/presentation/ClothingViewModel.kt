@@ -24,7 +24,7 @@ class ClothingViewModel : ViewModel() {
     val itemTooltipVisible: Map<String, Boolean> = _itemViewExpanded
     private val _categoryViewExpanded = mutableStateMapOf<String, Boolean>()
     val categoryViewExpanded: Map<String, Boolean> = _categoryViewExpanded
-    var currentSettingsAction by mutableStateOf(SettingsAction.EditCategory)
+    var currentSettingsAction by mutableStateOf(SettingsAction.CreateCategory)
 
     init {
         val repositoryResult = clothingRepository.getClothingCategories()
@@ -38,7 +38,7 @@ class ClothingViewModel : ViewModel() {
 
     private fun updateClosetStatus() {
         val statusPerCategory = clothingCategories.map {
-            val categoryItems = _clothingItems.filter { item -> item.category == it }
+            val categoryItems = _clothingItems.filter { item -> item.categoryId == it.id }
             val categoryItemCount = categoryItems.sumOf { item -> item.count }
             if (categoryItemCount > it.minNeededAmount) {
                 ClosetStatus.Ok
@@ -84,6 +84,23 @@ class ClothingViewModel : ViewModel() {
         updateClosetStatus()
     }
 
+    fun editCategory(categoryToEdit: ClothingCategory, name: String, minNeededAmount: Int): ClothingCategory {
+        val index = _clothingCategories.indexOf(categoryToEdit)
+        _clothingCategories[index] = _clothingCategories[index].copy(
+            name = name,
+            minNeededAmount = minNeededAmount
+        )
+        _clothingCategories.sortBy { it.name }
+        updateClosetStatus()
+        return _clothingCategories[index]
+    }
+
+    fun deleteCategory(categoryToDelete: ClothingCategory) {
+        _clothingCategories.remove(categoryToDelete)
+        _clothingItems.removeAll { it.categoryId == categoryToDelete.id }
+        updateClosetStatus()
+    }
+
     fun createItem(
         name: String,
         count: Int,
@@ -96,7 +113,7 @@ class ClothingViewModel : ViewModel() {
             name = name,
             count = count,
             totalCount = totalCount,
-            category = category,
+            categoryId = category.id,
             description = description,
             picture = null
         )

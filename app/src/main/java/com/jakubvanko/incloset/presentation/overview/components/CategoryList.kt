@@ -19,9 +19,9 @@ import com.jakubvanko.incloset.presentation.ClothingViewModel
 @Composable
 private fun CategoryCountText(category: ClothingCategory, clothingViewModel: ClothingViewModel) {
     Text(text = "${
-        clothingViewModel.clothingItems.filter { it.category == category }.sumOf { it.count }
+        clothingViewModel.clothingItems.filter { it.categoryId == category.id }.sumOf { it.count }
     }/${
-        clothingViewModel.clothingItems.filter { it.category == category }.sumOf { it.totalCount }
+        clothingViewModel.clothingItems.filter { it.categoryId == category.id }.sumOf { it.totalCount }
     }")
 }
 
@@ -30,7 +30,7 @@ private fun getClosetStatusForCategory(
     category: ClothingCategory
 ): ClosetStatus {
     val categoryItemCount =
-        clothingViewModel.clothingItems.filter { it.category == category }.sumOf { it.count }
+        clothingViewModel.clothingItems.filter { it.categoryId == category.id }.sumOf { it.count }
     return when {
         categoryItemCount > category.minNeededAmount -> ClosetStatus.Ok
         categoryItemCount == category.minNeededAmount -> ClosetStatus.Warning

@@ -5,7 +5,7 @@ data class ClothingItem(
     val name: String,
     val count: Int,
     val totalCount: Int,
-    val category: ClothingCategory,
+    val categoryId: String,
     val description: String?,
     val picture: String?,
 )

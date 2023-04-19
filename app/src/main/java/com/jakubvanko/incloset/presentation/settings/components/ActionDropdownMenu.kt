@@ -11,7 +11,7 @@ import com.jakubvanko.incloset.data.repository.SettingsAction
 @Composable
 fun ActionDropdownMenu(currentAction: SettingsAction, setCurrentAction: (SettingsAction) -> Unit) {
     var isExpanded by remember { mutableStateOf(false) }
-    var regex = Regex("([a-z])([A-Z]+)")
+    val regex = Regex("([a-z])([A-Z]+)")
     Row {
         ExposedDropdownMenuBox(
             modifier = Modifier.fillMaxWidth(),
@@ -34,7 +34,7 @@ fun ActionDropdownMenu(currentAction: SettingsAction, setCurrentAction: (Setting
                 expanded = isExpanded,
                 onDismissRequest = { isExpanded = false },
             ) {
-                SettingsAction.values().forEach {
+                SettingsAction.values().sortedBy { it.name }.forEach {
                     DropdownMenuItem(
                         text = { Text(text = it.name.replace(regex, "$1 $2")) },
                         onClick = {

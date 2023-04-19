@@ -18,10 +18,10 @@ private fun getClothingItems(
     category: ClothingCategory, clothingViewModel: ClothingViewModel
 ): List<ClothingItem> {
     val clothingItems =
-        clothingViewModel.clothingItems.filter { it.category == category && it.count != 0 }
+        clothingViewModel.clothingItems.filter { it.categoryId == category.id && it.count != 0 }
             .sortedBy { it.name }
     if (clothingViewModel.isInEditMode) {
-        return clothingItems.plus(clothingViewModel.clothingItems.filter { it.category == category && it.count == 0 }
+        return clothingItems.plus(clothingViewModel.clothingItems.filter { it.categoryId == category.id && it.count == 0 }
             .sortedBy { it.name })
     }
     return clothingItems
@@ -50,7 +50,7 @@ fun ClothingListForCategory(
     Column {
         clothingItems.forEach { item ->
             val isTooltipVisible =
-                clothingViewModel.itemTooltipVisible.getOrDefault(item.id, false);
+                clothingViewModel.itemTooltipVisible.getOrDefault(item.id, false)
 
             ListItem(
                 modifier = Modifier.clickable { clothingViewModel.flipItemViewExpanded(item) },
