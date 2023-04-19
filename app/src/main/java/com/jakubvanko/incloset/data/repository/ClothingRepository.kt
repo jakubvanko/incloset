@@ -23,9 +23,9 @@ class ClothingRepository {
 
 fun getItemsMock(): Pair<List<ClothingItem>, List<ClothingCategory>> {
     val clothingCategories = mutableListOf(
-        ClothingCategory("1", "T-shirts", 1, "T-shirts with a short sleeve"),
-        ClothingCategory("2", "Trousers", 1, "Basic jeans"),
-        ClothingCategory("3", "Underwear", 2, "Boxer briefs")
+        ClothingCategory("1", "T-shirts", 1),
+        ClothingCategory("2", "Trousers", 1),
+        ClothingCategory("3", "Underwear", 2)
     )
     val clothingItems = mutableListOf(
         ClothingItem("1", "Black T-shirt", 1, 1, clothingCategories[0], "With a cat", null),

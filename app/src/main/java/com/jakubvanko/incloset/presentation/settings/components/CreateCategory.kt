@@ -20,8 +20,6 @@ fun CreateCategory(clothingViewModel: ClothingViewModel) {
     var name by remember { mutableStateOf("") }
     var isNameError by remember { mutableStateOf(false) }
 
-    var description by remember { mutableStateOf("") }
-
     var minNeededAmount by remember { mutableStateOf("1") }
     var isMinNeededAmountError by remember { mutableStateOf(false) }
 
@@ -51,13 +49,6 @@ fun CreateCategory(clothingViewModel: ClothingViewModel) {
         Spacer(modifier = Modifier.height(24.dp))
         TextField(
             modifier = Modifier.fillMaxWidth(),
-            value = description,
-            onValueChange = { description = it },
-            label = { Text("Description") }
-        )
-        Spacer(modifier = Modifier.height(24.dp))
-        TextField(
-            modifier = Modifier.fillMaxWidth(),
             value = minNeededAmount,
             onValueChange = {
                 if (it == "" || it.toIntOrNull() != null) {
@@ -83,9 +74,8 @@ fun CreateCategory(clothingViewModel: ClothingViewModel) {
                 isNameError = true
             }
             if (name != "" && minNeededAmount != "") {
-                clothingViewModel.createCategory(name, minNeededAmount.toInt(), description)
+                clothingViewModel.createCategory(name, minNeededAmount.toInt())
                 name = ""
-                description = ""
                 minNeededAmount = "1"
                 isSuccess = true
             }

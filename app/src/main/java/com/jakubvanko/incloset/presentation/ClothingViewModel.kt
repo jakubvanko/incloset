@@ -9,7 +9,7 @@ import com.jakubvanko.incloset.domain.model.ClothingCategory
 import com.jakubvanko.incloset.domain.model.ClothingItem
 
 class ClothingViewModel : ViewModel() {
-    private val clothingRepository = ClothingRepository();
+    private val clothingRepository = ClothingRepository()
     private val _clothingCategories = mutableStateListOf<ClothingCategory>()
     val clothingCategories: List<ClothingCategory> = _clothingCategories
     private val _clothingItems = mutableStateListOf<ClothingItem>()
@@ -28,7 +28,7 @@ class ClothingViewModel : ViewModel() {
 
     init {
         val repositoryResult = clothingRepository.getClothingCategories()
-        _clothingCategories.addAll(repositoryResult.second);
+        _clothingCategories.addAll(repositoryResult.second)
         _clothingCategories.sortBy { it.name }
         _categoryViewExpanded[_clothingCategories.first().id] = true
         _clothingItems.addAll(repositoryResult.first)
@@ -73,12 +73,11 @@ class ClothingViewModel : ViewModel() {
         updateClosetStatus()
     }
 
-    fun createCategory(name: String, minNeededAmount: Int, description: String?) {
+    fun createCategory(name: String, minNeededAmount: Int) {
         val newCategory = ClothingCategory(
             id = clothingRepository.generateId(),
             name = name,
             minNeededAmount = minNeededAmount,
-            description = description
         )
         _clothingCategories.add(newCategory)
         _clothingCategories.sortBy { it.name }
