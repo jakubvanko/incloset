@@ -84,7 +84,11 @@ class ClothingViewModel : ViewModel() {
         updateClosetStatus()
     }
 
-    fun editCategory(categoryToEdit: ClothingCategory, name: String, minNeededAmount: Int): ClothingCategory {
+    fun editCategory(
+        categoryToEdit: ClothingCategory,
+        name: String,
+        minNeededAmount: Int
+    ): ClothingCategory {
         val index = _clothingCategories.indexOf(categoryToEdit)
         _clothingCategories[index] = _clothingCategories[index].copy(
             name = name,
@@ -119,6 +123,32 @@ class ClothingViewModel : ViewModel() {
         )
         _clothingItems.add(newItem)
         _clothingItems.sortBy { it.name }
+        updateClosetStatus()
+    }
+
+    fun editItem(
+        itemToEdit: ClothingItem,
+        name: String,
+        count: Int,
+        totalCount: Int,
+        category: ClothingCategory,
+        description: String?
+    ): ClothingItem {
+        val index = _clothingItems.indexOf(itemToEdit)
+        _clothingItems[index] = _clothingItems[index].copy(
+            name = name,
+            count = count,
+            totalCount = totalCount,
+            categoryId = category.id,
+            description = description
+        )
+        _clothingItems.sortBy { it.name }
+        updateClosetStatus()
+        return _clothingItems[index]
+    }
+
+    fun deleteItem(itemToDelete: ClothingItem) {
+        _clothingItems.remove(itemToDelete)
         updateClosetStatus()
     }
 

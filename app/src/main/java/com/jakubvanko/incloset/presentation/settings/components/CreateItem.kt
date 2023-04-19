@@ -31,7 +31,7 @@ fun CreateItem(clothingViewModel: ClothingViewModel) {
     var totalCount by remember { mutableStateOf("1") }
     var isTotalCountError by remember { mutableStateOf(false) }
 
-    var category by remember { mutableStateOf(clothingViewModel.clothingCategories.get(0)) }
+    var category by remember { mutableStateOf(clothingViewModel.clothingCategories.getOrNull(0)) }
 
     var isSuccess by remember { mutableStateOf(false) }
 
@@ -41,9 +41,13 @@ fun CreateItem(clothingViewModel: ClothingViewModel) {
             .verticalScroll(rememberScrollState())
             .padding(24.dp, 32.dp)
     ) {
+        if (category == null) {
+            Text("No categories exist, create some first.", color = Color.Red)
+            return@Column
+        }
         CategoryDropdownMenu(
             categories = clothingViewModel.clothingCategories,
-            currentCategory = category,
+            currentCategory = category!!,
             setCurrentCategory = { category = it })
         Spacer(modifier = Modifier.height(24.dp))
         TextField(
@@ -122,8 +126,8 @@ fun CreateItem(clothingViewModel: ClothingViewModel) {
                     name,
                     count.toInt(),
                     if (totalCount.toInt() < count.toInt()) count.toInt() else totalCount.toInt(),
-                    category,
-                    description
+                    category!!,
+                    if (description == "") null else description
                 )
                 name = ""
                 description = ""

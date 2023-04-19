@@ -108,6 +108,7 @@ fun EditCategory(clothingViewModel: ClothingViewModel) {
                         minNeededAmount!!.toInt()
                     )
                     isSuccessEdit = true
+                    isSuccessDelete = false
                 }
             }) {
                 Text("Save changes")
@@ -121,6 +122,7 @@ fun EditCategory(clothingViewModel: ClothingViewModel) {
                 name = categoryToEdit?.name ?: "No category selected"
                 minNeededAmount = categoryToEdit?.minNeededAmount?.toString()
                 isSuccessDelete = true
+                isSuccessEdit = false
             }) {
                 Text("Delete category")
             }
