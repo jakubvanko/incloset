@@ -30,8 +30,8 @@ fun CreateCategory(clothingViewModel: ClothingViewModel) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(24.dp, 32.dp)
             .verticalScroll(rememberScrollState())
+            .padding(24.dp, 32.dp)
     ) {
         TextField(
             modifier = Modifier.fillMaxWidth(),

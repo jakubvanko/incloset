@@ -38,8 +38,8 @@ fun CreateItem(clothingViewModel: ClothingViewModel) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(24.dp, 32.dp)
             .verticalScroll(rememberScrollState())
+            .padding(24.dp, 32.dp)
     ) {
         CategoryDropdownMenu(
             categories = clothingViewModel.clothingCategories,
