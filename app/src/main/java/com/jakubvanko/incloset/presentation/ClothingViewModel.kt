@@ -9,7 +9,7 @@ import com.jakubvanko.incloset.domain.model.ClothingCategory
 import com.jakubvanko.incloset.domain.model.ClothingItem
 
 class ClothingViewModel : ViewModel() {
-    private val clothingRepository = ClothingRepository()
+    private val clothingRepository = ClothingRepository(this)
     private val _clothingCategories = mutableStateListOf<ClothingCategory>()
     val clothingCategories: List<ClothingCategory> = _clothingCategories
     private val _clothingItems = mutableStateListOf<ClothingItem>()
@@ -27,12 +27,24 @@ class ClothingViewModel : ViewModel() {
     var currentSettingsAction by mutableStateOf(SettingsAction.CreateCategory)
 
     init {
-        val repositoryResult = clothingRepository.getClothingCategories()
-        _clothingCategories.addAll(repositoryResult.second)
-        _clothingCategories.sortBy { it.name }
-        _categoryViewExpanded[_clothingCategories.first().id] = true
-        _clothingItems.addAll(repositoryResult.first)
+        clothingRepository.getClothingCategories()
+        clothingRepository.getClothingItems()
+    }
+
+    fun setClothingItems(clothingItems: List<ClothingItem>) {
+        _clothingItems.clear()
+        _clothingItems.addAll(clothingItems)
         _clothingItems.sortBy { it.name }
+        updateClosetStatus()
+    }
+
+    fun setClothingCategories(clothingCategories: List<ClothingCategory>) {
+        _clothingCategories.clear()
+        _clothingCategories.addAll(clothingCategories)
+        _clothingCategories.sortBy { it.name }
+        if (_clothingCategories.isNotEmpty()) {
+            _categoryViewExpanded[_clothingCategories.first().id] = true
+        }
         updateClosetStatus()
     }
 
@@ -70,6 +82,7 @@ class ClothingViewModel : ViewModel() {
         }
         val index = _clothingItems.indexOf(item)
         _clothingItems[index] = _clothingItems[index].copy(count = countToSet)
+        clothingRepository.saveClothingItem(_clothingItems[index])
         updateClosetStatus()
     }
 
@@ -78,9 +91,11 @@ class ClothingViewModel : ViewModel() {
             id = clothingRepository.generateId(),
             name = name,
             minNeededAmount = minNeededAmount,
+            userId = null
         )
         _clothingCategories.add(newCategory)
         _clothingCategories.sortBy { it.name }
+        clothingRepository.saveClothingCategory(newCategory)
         updateClosetStatus()
     }
 
@@ -96,12 +111,17 @@ class ClothingViewModel : ViewModel() {
         )
         _clothingCategories.sortBy { it.name }
         updateClosetStatus()
+        clothingRepository.saveClothingCategory(_clothingCategories[index])
         return _clothingCategories[index]
     }
 
     fun deleteCategory(categoryToDelete: ClothingCategory) {
         _clothingCategories.remove(categoryToDelete)
+        _clothingItems.filter { it.categoryId == categoryToDelete.id }.forEach {
+            clothingRepository.deleteClothingItem(it)
+        }
         _clothingItems.removeAll { it.categoryId == categoryToDelete.id }
+        clothingRepository.deleteClothingCategory(categoryToDelete)
         updateClosetStatus()
     }
 
@@ -119,10 +139,12 @@ class ClothingViewModel : ViewModel() {
             totalCount = totalCount,
             categoryId = category.id,
             description = description,
-            picture = null
+            picture = null,
+            userId = null
         )
         _clothingItems.add(newItem)
         _clothingItems.sortBy { it.name }
+        clothingRepository.saveClothingItem(newItem)
         updateClosetStatus()
     }
 
@@ -144,11 +166,13 @@ class ClothingViewModel : ViewModel() {
         )
         _clothingItems.sortBy { it.name }
         updateClosetStatus()
+        clothingRepository.saveClothingItem(_clothingItems[index])
         return _clothingItems[index]
     }
 
     fun deleteItem(itemToDelete: ClothingItem) {
         _clothingItems.remove(itemToDelete)
+        clothingRepository.deleteClothingItem(itemToDelete)
         updateClosetStatus()
     }
 

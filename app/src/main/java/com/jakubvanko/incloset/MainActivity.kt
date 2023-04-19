@@ -22,16 +22,12 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         user = FirebaseAuth.getInstance().currentUser
-        val viewModel = ClothingViewModel();
+        val viewModel = ClothingViewModel()
         if (user == null) {
             triggerSignInScreen()
-            setContent {
-                MainView(viewModel)
-            }
-        } else {
-            setContent {
-                MainView(viewModel)
-            }
+        }
+        setContent {
+            MainView(viewModel)
         }
     }
 

@@ -8,4 +8,7 @@ data class ClothingItem(
     val categoryId: String,
     val description: String?,
     val picture: String?,
-)
+    var userId: String?
+) {
+    constructor() : this("", "", 0, 0, "", null, null, null)
+}
