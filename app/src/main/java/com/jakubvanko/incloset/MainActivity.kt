@@ -14,6 +14,8 @@ import com.jakubvanko.incloset.presentation.MainView
 
 class MainActivity : ComponentActivity() {
     private var user: FirebaseUser? = null
+    private val viewModel = ClothingViewModel()
+
     private val signInLauncher =
         registerForActivityResult(FirebaseAuthUIActivityResultContract()) { res ->
             this.onSignInFinished(res)
@@ -22,7 +24,6 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         user = FirebaseAuth.getInstance().currentUser
-        val viewModel = ClothingViewModel()
         if (user == null) {
             triggerSignInScreen()
         }
@@ -46,6 +47,7 @@ class MainActivity : ComponentActivity() {
         val response = result.idpResponse
         if (result.resultCode == RESULT_OK) {
             user = FirebaseAuth.getInstance().currentUser
+            viewModel.setUserForViewModel(user!!)
         } else {
             Log.e("MainActivity", "Error logging in " + response?.error?.errorCode)
         }

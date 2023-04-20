@@ -2,6 +2,8 @@ package com.jakubvanko.incloset.presentation
 
 import androidx.compose.runtime.*
 import androidx.lifecycle.ViewModel
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.jakubvanko.incloset.data.repository.ClothingRepository
 import com.jakubvanko.incloset.data.repository.SettingsAction
 import com.jakubvanko.incloset.domain.model.ClosetStatus
@@ -26,7 +28,17 @@ class ClothingViewModel : ViewModel() {
     val categoryViewExpanded: Map<String, Boolean> = _categoryViewExpanded
     var currentSettingsAction by mutableStateOf(SettingsAction.CreateCategory)
 
+    var user by mutableStateOf(FirebaseAuth.getInstance().currentUser);
+
     init {
+        if (user != null) {
+            clothingRepository.getClothingCategories()
+            clothingRepository.getClothingItems()
+        }
+    }
+
+    fun setUserForViewModel(user: FirebaseUser) {
+        this.user = user
         clothingRepository.getClothingCategories()
         clothingRepository.getClothingItems()
     }
