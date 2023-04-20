@@ -1,5 +1,6 @@
 package com.jakubvanko.incloset.ui.screens
 
+import android.app.Activity
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -10,10 +11,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import com.jakubvanko.incloset.presentation.ClothingViewModel
 
 @Composable
 fun InfoCard(keyText: String?, valueText: String) {
@@ -31,37 +34,40 @@ fun InfoCard(keyText: String?, valueText: String) {
     }
 }
 
-//´TODO: Something with image. Button. Take arguments.
-@Preview(showBackground = true)
 @Composable
-fun ProfileScreen() {
+fun ProfileScreen(clothingViewModel: ClothingViewModel) {
+    val activity = (LocalContext.current as? Activity)
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(20.dp, 0.dp)
     ) {
         AsyncImage(
-            model = "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1887&q=80.jkpg",
+            model = clothingViewModel.user?.photoUrl
+                ?: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1887&q=80.jkpg",
             contentDescription = "Translated description of what the image contains",
             contentScale = ContentScale.Crop,
             modifier = Modifier
                 .padding(0.dp, 30.dp, 0.dp, 20.dp)
                 .size(160.dp)
-                .clip(CircleShape)                       // clip to the circle shape
+                .clip(CircleShape)
                 .border(2.dp, Color.Black, CircleShape)
                 .align(Alignment.CenterHorizontally)
         )
 
-        InfoCard("Name", "Jakub Vanko")
-        InfoCard("Email", "kubko.vanko@gmail.com")
-        InfoCard("Registered on", "Mar 15, 2023")
+        InfoCard("Id", clothingViewModel.user?.uid ?: "Unknown")
+        InfoCard("Name", clothingViewModel.user?.displayName ?: "Unknown")
+        InfoCard("Email", clothingViewModel.user?.email ?: "Unknown")
         InfoCard("Free/Premium", "Running free version")
         OutlinedButton(
             modifier = Modifier
                 .align(Alignment.End)
                 .fillMaxWidth(0.35f),
-            onClick = { /*TODO*/ }) {
-            Text("Log out")
+            onClick = {
+                clothingViewModel.logUserOut()
+                activity?.finish()
+            }) {
+            Text("Log out and exit")
         }
     }
 }

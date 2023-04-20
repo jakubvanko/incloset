@@ -45,7 +45,7 @@ fun NavRoutes(
     ) {
         composable(Routes.Overview.name) { OverviewScreen(clothingViewModel) }
         composable(Routes.Settings.name) { SettingsScreen(clothingViewModel) }
-        composable(Routes.Profile.name) { ProfileScreen() }
+        composable(Routes.Profile.name) { ProfileScreen(clothingViewModel) }
     }
 }
 
@@ -58,7 +58,6 @@ fun MainView(clothingViewModel: ClothingViewModel) {
     val items = listOf(
         Pair(Routes.Overview, Icons.Rounded.Home),
         Pair(Routes.Settings, Icons.Rounded.Settings),
-        //Pair(Routes.Manage, Icons.Rounded.Edit),
         Pair(Routes.Profile, Icons.Rounded.AccountCircle)
     )
 

@@ -43,6 +43,11 @@ class ClothingViewModel : ViewModel() {
         clothingRepository.getClothingItems()
     }
 
+    fun logUserOut() {
+        FirebaseAuth.getInstance().signOut()
+        user = null
+    }
+
     fun setClothingItems(clothingItems: List<ClothingItem>) {
         _clothingItems.clear()
         _clothingItems.addAll(clothingItems)
