@@ -62,7 +62,7 @@ fun ProfileScreen(clothingViewModel: ClothingViewModel) {
         OutlinedButton(
             modifier = Modifier
                 .align(Alignment.End)
-                .fillMaxWidth(0.35f),
+                .fillMaxWidth(0.5f),
             onClick = {
                 clothingViewModel.logUserOut()
                 activity?.finish()
