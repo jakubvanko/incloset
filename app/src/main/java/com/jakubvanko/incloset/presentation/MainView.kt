@@ -1,10 +1,10 @@
 package com.jakubvanko.incloset.presentation
 
 import android.annotation.SuppressLint
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.rounded.AccountCircle
 import androidx.compose.material.icons.rounded.Edit
 import androidx.compose.material.icons.rounded.Home
@@ -20,6 +20,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.jakubvanko.incloset.data.repository.SettingsAction
 import com.jakubvanko.incloset.presentation.overview.OverviewScreen
 import com.jakubvanko.incloset.presentation.settings.SettingsScreen
 import com.jakubvanko.incloset.presentation.theme.InclosetTheme
@@ -27,7 +28,6 @@ import com.jakubvanko.incloset.ui.screens.ProfileScreen
 
 enum class Routes {
     Overview,
-    Manage,
     Settings,
     Profile
 }
@@ -54,10 +54,10 @@ fun NavRoutes(
 @Composable
 fun MainView(clothingViewModel: ClothingViewModel) {
     val navController = rememberNavController();
+    val regex = Regex("([a-z])([A-Z]+)")
 
     val items = listOf(
         Pair(Routes.Overview, Icons.Rounded.Home),
-        Pair(Routes.Settings, Icons.Rounded.Settings),
         Pair(Routes.Profile, Icons.Rounded.AccountCircle)
     )
 
@@ -76,6 +76,8 @@ fun MainView(clothingViewModel: ClothingViewModel) {
                             label = { Text(item.first.name) },
                             selected = currentDestination?.hierarchy?.any { it.route == item.first.name } == true,
                             onClick = {
+                                clothingViewModel.isTopBarVisible = false
+                                clothingViewModel.isFABVisible = item.first == Routes.Overview
                                 navController.navigate(item.first.name) {
                                     // Pop up to the start destination of the graph to
                                     // avoid building up a large stack of destinations
@@ -93,7 +95,80 @@ fun MainView(clothingViewModel: ClothingViewModel) {
                         )
                     }
                 }
-            }) {
+            },
+                floatingActionButton = {
+                    if (clothingViewModel.isFABVisible) {
+                        ExposedDropdownMenuBox(
+                            expanded = clothingViewModel.isFABExpanded,
+                            onExpandedChange = {
+                                clothingViewModel.isFABExpanded = !clothingViewModel.isFABExpanded
+                            }) {
+                            ExtendedFloatingActionButton(
+                                modifier = Modifier
+                                    .menuAnchor()
+                                    .fillMaxWidth(0.35F),
+                                text = { Text(text = "Edit") },
+                                icon = { Icon(Icons.Filled.Edit, "Edit") },
+                                onClick = { /*TODO*/ })
+                            ExposedDropdownMenu(
+                                expanded = clothingViewModel.isFABExpanded,
+                                onDismissRequest = { clothingViewModel.isFABExpanded = false }) {
+                                SettingsAction.values().sortedBy { it.name }.forEach {
+                                    DropdownMenuItem(
+                                        text = { Text(text = it.name.replace(regex, "$1 $2")) },
+                                        onClick = {
+                                            clothingViewModel.isFABExpanded = false
+                                            clothingViewModel.isFABVisible = false
+                                            clothingViewModel.isTopBarVisible = true
+                                            clothingViewModel.currentSettingsAction = it
+                                            navController.navigate(Routes.Settings.name) {
+                                                popUpTo(navController.graph.findStartDestination().id) {
+                                                    saveState = true
+                                                }
+                                                launchSingleTop = true
+                                                restoreState = true
+                                            }
+                                        },
+                                        contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding,
+                                    )
+                                }
+                            }
+                        }
+                    }
+                },
+                topBar = {
+                    if (clothingViewModel.isTopBarVisible) {
+                        TopAppBar(
+                            title = {
+                                Text(
+                                    text = clothingViewModel.currentSettingsAction.name.replace(
+                                        regex,
+                                        "$1 $2"
+                                    )
+                                )
+                            },
+                            navigationIcon = {
+                                IconButton(onClick = {
+                                    clothingViewModel.isTopBarVisible = false
+                                    clothingViewModel.isFABVisible = true
+                                    navController.navigate(Routes.Overview.name) {
+                                        popUpTo(navController.graph.findStartDestination().id) {
+                                            saveState = true
+                                        }
+                                        launchSingleTop = true
+                                        restoreState = true
+                                    }
+                                }) {
+                                    Icon(
+                                        imageVector = Icons.Filled.KeyboardArrowLeft,
+                                        contentDescription = "Go back"
+                                    )
+                                }
+                            },
+                        )
+                    }
+                }
+            ) {
                 NavRoutes(navController, it, clothingViewModel)
             }
         }

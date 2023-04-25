@@ -27,6 +27,9 @@ class ClothingViewModel : ViewModel() {
     private val _categoryViewExpanded = mutableStateMapOf<String, Boolean>()
     val categoryViewExpanded: Map<String, Boolean> = _categoryViewExpanded
     var currentSettingsAction by mutableStateOf(SettingsAction.CreateCategory)
+    var isFABVisible by mutableStateOf(true)
+    var isFABExpanded by mutableStateOf(false)
+    var isTopBarVisible by mutableStateOf(false)
 
     var user by mutableStateOf(FirebaseAuth.getInstance().currentUser);
 
