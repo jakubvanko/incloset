@@ -78,9 +78,10 @@ fun MainView(clothingViewModel: ClothingViewModel) {
             color = MaterialTheme.colorScheme.background
         ) {
             Scaffold(bottomBar = {
+                val navBackStackEntry by navController.currentBackStackEntryAsState()
+                val currentDestination = navBackStackEntry?.destination
+                if (!clothingViewModel.isTopBarVisible) {
                 NavigationBar {
-                    val navBackStackEntry by navController.currentBackStackEntryAsState()
-                    val currentDestination = navBackStackEntry?.destination
                     items.forEach { item ->
                         NavigationBarItem(
                             icon = { Icon(item.second, contentDescription = item.first.name) },
@@ -106,7 +107,7 @@ fun MainView(clothingViewModel: ClothingViewModel) {
                         )
                     }
                 }
-            },
+            }},
                 floatingActionButton = {
                     if (clothingViewModel.isFABVisible) {
                         ExposedDropdownMenuBox(
