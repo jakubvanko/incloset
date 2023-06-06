@@ -7,6 +7,7 @@ import com.google.firebase.ktx.Firebase
 import com.jakubvanko.incloset.domain.model.ClothingCategory
 import com.jakubvanko.incloset.domain.model.ClothingItem
 import com.jakubvanko.incloset.presentation.ClothingViewModel
+import java.util.*
 
 enum class SettingsAction {
     EditCategory, EditItem, CreateCategory, CreateItem,
@@ -65,8 +66,7 @@ class ClothingRepository(var clothingViewModel: ClothingViewModel) {
     }
 
     fun generateId(): String {
-        // TODO: Would be better to replace this with something better
-        return System.currentTimeMillis().toString()
+        return UUID.randomUUID().toString()
     }
 
 
