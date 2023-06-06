@@ -12,11 +12,13 @@ import androidx.compose.ui.text.capitalize
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import com.jakubvanko.incloset.presentation.ClothingViewModel
+import com.jakubvanko.incloset.presentation.Routes
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CreateCategory(clothingViewModel: ClothingViewModel) {
+fun CreateCategory(clothingViewModel: ClothingViewModel, goBack: () -> Unit) {
     var name by remember { mutableStateOf("") }
     var isNameError by remember { mutableStateOf(false) }
 
@@ -78,6 +80,7 @@ fun CreateCategory(clothingViewModel: ClothingViewModel) {
                 name = ""
                 minNeededAmount = "1"
                 isSuccess = true
+                goBack()
             }
         }) {
             Text("Create new category")

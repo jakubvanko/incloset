@@ -34,7 +34,8 @@ enum class Routes {
 fun NavRoutes(
     navController: NavHostController,
     paddingValues: PaddingValues,
-    clothingViewModel: ClothingViewModel
+    clothingViewModel: ClothingViewModel,
+    goBack: () -> Unit
 ) {
     NavHost(
         navController = navController,
@@ -42,7 +43,7 @@ fun NavRoutes(
         modifier = Modifier.padding(paddingValues)
     ) {
         composable(Routes.Overview.name) { OverviewScreen(clothingViewModel) }
-        composable(Routes.Settings.name) { SettingsScreen(clothingViewModel) }
+        composable(Routes.Settings.name) { SettingsScreen(clothingViewModel, goBack) }
         composable(Routes.Profile.name) { ProfileScreen(clothingViewModel) }
     }
 }
@@ -58,6 +59,18 @@ fun MainView(clothingViewModel: ClothingViewModel) {
         Pair(Routes.Overview, Icons.Rounded.Home),
         Pair(Routes.Profile, Icons.Rounded.AccountCircle)
     )
+
+    val goBack = {
+        clothingViewModel.isTopBarVisible = false
+        clothingViewModel.isFABVisible = true
+        navController.navigate(Routes.Overview.name) {
+            popUpTo(navController.graph.findStartDestination().id) {
+                saveState = true
+            }
+            launchSingleTop = true
+            restoreState = true
+        }
+    }
 
     InclosetTheme {
         Surface(
@@ -149,17 +162,7 @@ fun MainView(clothingViewModel: ClothingViewModel) {
                                 containerColor = MaterialTheme.colorScheme.primaryContainer
                             ),
                             navigationIcon = {
-                                IconButton(onClick = {
-                                    clothingViewModel.isTopBarVisible = false
-                                    clothingViewModel.isFABVisible = true
-                                    navController.navigate(Routes.Overview.name) {
-                                        popUpTo(navController.graph.findStartDestination().id) {
-                                            saveState = true
-                                        }
-                                        launchSingleTop = true
-                                        restoreState = true
-                                    }
-                                }) {
+                                IconButton(onClick = goBack) {
                                     Icon(
                                         imageVector = Icons.Filled.KeyboardArrowLeft,
                                         contentDescription = "Go back"
@@ -170,7 +173,7 @@ fun MainView(clothingViewModel: ClothingViewModel) {
                     }
                 }
             ) {
-                NavRoutes(navController, it, clothingViewModel)
+                NavRoutes(navController, it, clothingViewModel, goBack)
             }
         }
     }

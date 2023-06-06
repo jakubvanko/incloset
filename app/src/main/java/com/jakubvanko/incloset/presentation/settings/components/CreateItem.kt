@@ -15,11 +15,13 @@ import androidx.compose.ui.text.capitalize
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import com.jakubvanko.incloset.presentation.ClothingViewModel
+import com.jakubvanko.incloset.presentation.Routes
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CreateItem(clothingViewModel: ClothingViewModel) {
+fun CreateItem(clothingViewModel: ClothingViewModel, goBack: () -> Unit) {
     var name by remember { mutableStateOf("") }
     var isNameError by remember { mutableStateOf(false) }
 
@@ -134,6 +136,7 @@ fun CreateItem(clothingViewModel: ClothingViewModel) {
                 count = "1"
                 totalCount = "1"
                 isSuccess = true
+                goBack()
             }
         }) {
             Text("Create new item")

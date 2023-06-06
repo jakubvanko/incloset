@@ -15,6 +15,7 @@ import androidx.compose.ui.text.capitalize
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import com.jakubvanko.incloset.presentation.ClothingViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
